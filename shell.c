@@ -12,17 +12,31 @@
 int main(int ac, char **argv)
 {
 	char *prompt = "shell$ ";
-	char *lineptr;
+	char *lineptr = NULL;
 	size_t n = 0;
+	ssize_t nchars;
+	const char *delim = " \n"
 
 	/* declaring void variables */
 	(void)ac;
 	(void)argv;
 
-	printf("%s", prompt);
-	getline(&lineptr, &n, stdin);
-	printf("%s\n", lineptr);
+	/* create an infinite loop */
+	while (1)
+	{
+		printf("%s", prompt);
+		nchars = getline(&lineptr, &n, stdin);
 
-	free(lineptr);
+		/* check for getline or EOF issues */
+		if (nchars == -1)
+		{
+			printf("Exit..\n");
+			return (-1);
+		}
+		printf("%s\n", lineptr);
+
+		/* free up memory */
+		free(lineptr);
+	}
 	return (0);
 }
